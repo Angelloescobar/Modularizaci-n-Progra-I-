@@ -1,22 +1,324 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{AC9155C1-97E4-4F80-AAEA-3373E388270D}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AC9155C1-97E4-4F80-AAEA-3373E388270D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AC9155C1-97E4-4F80-AAEA-3373E388270D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC9155C1-97E4-4F80-AAEA-3373E388270D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AC9155C1-97E4-4F80-AAEA-3373E388270D}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-EndGlobal
+using System;
+
+namespace ConsoleApp1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("Seleccione una opción:");
+                Console.WriteLine("1. Calculadora básica");
+                Console.WriteLine("2. Validación de contraseña");
+                Console.WriteLine("3. Números primos");
+                Console.WriteLine("4. Suma de números pares");
+                Console.WriteLine("5. Conversión de temperatura");
+                Console.WriteLine("6. Contador de vocales");
+                Console.WriteLine("7. Cálculo de factorial");
+                Console.WriteLine("8. Juego de adivinanza");
+                Console.WriteLine("9. Paso por referencia");
+                Console.WriteLine("10. Tabla de multiplicar");
+                Console.WriteLine("0. Salir");
+
+                string opcion = Console.ReadLine();
+
+                switch (opcion)
+                {
+                    case "1":
+                        CalculadoraBasica();
+                        break;
+                    case "2":
+                        ValidacionContrasena();
+                        break;
+                    case "3":
+                        NumerosPrimos();
+                        break;
+                    case "4":
+                        SumaNumerosPares();
+                        break;
+                    case "5":
+                        ConversionTemperatura();
+                        break;
+                    case "6":
+                        ContadorVocales();
+                        break;
+                    case "7":
+                        CalculoFactorial();
+                        break;
+                    case "8":
+                        JuegoAdivinanza();
+                        break;
+                    case "9":
+                        PasoPorReferencia();
+                        break;
+                    case "10":
+                        TablaMultiplicar();
+                        break;
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("Opción no válida. Intente de nuevo.");
+                        break;
+                }
+            }
+        }
+
+        static void CalculadoraBasica()
+        {
+            Console.WriteLine("Ingrese el primer número:");
+            if (!double.TryParse(Console.ReadLine(), out double num1))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            Console.WriteLine("Ingrese el segundo número:");
+            if (!double.TryParse(Console.ReadLine(), out double num2))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            Console.WriteLine("Seleccione una operación (+, -, *, /):");
+            string operacion = Console.ReadLine();
+
+            double resultado = operacion switch
+            {
+                "+" => num1 + num2,
+                "-" => num1 - num2,
+                "*" => num1 * num2,
+                "/" => num2 != 0 ? num1 / num2 : double.NaN,
+                _ => double.NaN
+            };
+
+            if (double.IsNaN(resultado))
+            {
+                Console.WriteLine("Operación no válida o división por cero.");
+            }
+            else
+            {
+                Console.WriteLine($"El resultado es: {resultado}");
+            }
+        }
+
+        static void ValidacionContrasena()
+        {
+            string contrasena;
+            do
+            {
+                Console.WriteLine("Ingrese la contraseña:");
+                contrasena = Console.ReadLine();
+            } while (contrasena != "1234");
+
+            Console.WriteLine("Acceso concedido.");
+        }
+
+        static void NumerosPrimos()
+        {
+            Console.WriteLine("Ingrese un número:");
+            if (!int.TryParse(Console.ReadLine(), out int numero))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            bool esPrimo = EsPrimo(numero);
+            Console.WriteLine(esPrimo ? "El número es primo." : "El número no es primo.");
+        }
+
+        static bool EsPrimo(int numero)
+        {
+            if (numero <= 1) return false;
+            for (int i = 2; i <= Math.Sqrt(numero); i++)
+            {
+                if (numero % i == 0) return false;
+            }
+            return true;
+        }
+
+        static void SumaNumerosPares()
+        {
+            int suma = 0;
+            int numero;
+            do
+            {
+                Console.WriteLine("Ingrese un número (0 para terminar):");
+                if (!int.TryParse(Console.ReadLine(), out numero))
+                {
+                    Console.WriteLine("Número no válido.");
+                    continue;
+                }
+
+                if (numero % 2 == 0)
+                {
+                    suma += numero;
+                }
+            } while (numero != 0);
+
+            Console.WriteLine($"La suma de los números pares es: {suma}");
+        }
+
+        static void ConversionTemperatura()
+        {
+            Console.WriteLine("Seleccione una opción:");
+            Console.WriteLine("1. Celsius a Fahrenheit");
+            Console.WriteLine("2. Fahrenheit a Celsius");
+
+            string opcion = Console.ReadLine();
+            Console.WriteLine("Ingrese la temperatura:");
+            if (!double.TryParse(Console.ReadLine(), out double temperatura))
+            {
+                Console.WriteLine("Temperatura no válida.");
+                return;
+            }
+
+            double resultado = opcion switch
+            {
+                "1" => CelsiusAFahrenheit(temperatura),
+                "2" => FahrenheitACelsius(temperatura),
+                _ => double.NaN
+            };
+
+            if (double.IsNaN(resultado))
+            {
+                Console.WriteLine("Opción no válida.");
+            }
+            else
+            {
+                Console.WriteLine($"La temperatura convertida es: {resultado}");
+            }
+        }
+
+        static double CelsiusAFahrenheit(double celsius)
+        {
+            return (celsius * 9 / 5) + 32;
+        }
+
+        static double FahrenheitACelsius(double fahrenheit)
+        {
+            return (fahrenheit - 32) * 5 / 9;
+        }
+
+        static void ContadorVocales()
+        {
+            Console.WriteLine("Ingrese una frase:");
+            string frase = Console.ReadLine();
+            int contador = ContarVocales(frase);
+            Console.WriteLine($"La frase contiene {contador} vocales.");
+        }
+
+        static int ContarVocales(string frase)
+        {
+            int contador = 0;
+            foreach (char c in frase.ToLower())
+            {
+                if ("aeiou".Contains(c))
+                {
+                    contador++;
+                }
+            }
+            return contador;
+        }
+
+        static void CalculoFactorial()
+        {
+            Console.WriteLine("Ingrese un número:");
+            if (!int.TryParse(Console.ReadLine(), out int numero))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            long factorial = CalcularFactorial(numero);
+            Console.WriteLine($"El factorial de {numero} es: {factorial}");
+        }
+
+        static long CalcularFactorial(int numero)
+        {
+            long resultado = 1;
+            for (int i = 1; i <= numero; i++)
+            {
+                resultado *= i;
+            }
+            return resultado;
+        }
+
+        static void JuegoAdivinanza()
+        {
+            Random random = new Random();
+            int numeroSecreto = random.Next(1, 101);
+            int intento;
+
+            do
+            {
+                Console.WriteLine("Adivine el número (entre 1 y 100):");
+                if (!int.TryParse(Console.ReadLine(), out intento))
+                {
+                    Console.WriteLine("Número no válido.");
+                    continue;
+                }
+
+                if (intento < numeroSecreto)
+                {
+                    Console.WriteLine("Demasiado bajo.");
+                }
+                else if (intento > numeroSecreto)
+                {
+                    Console.WriteLine("Demasiado alto.");
+                }
+            } while (intento != numeroSecreto);
+
+            Console.WriteLine("¡Felicidades! Adivinaste el número.");
+        }
+
+        static void PasoPorReferencia()
+        {
+            Console.WriteLine("Ingrese el primer número:");
+            if (!int.TryParse(Console.ReadLine(), out int num1))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            Console.WriteLine("Ingrese el segundo número:");
+            if (!int.TryParse(Console.ReadLine(), out int num2))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            Console.WriteLine($"Valores originales: num1 = {num1}, num2 = {num2}");
+            Intercambiar(ref num1, ref num2);
+            Console.WriteLine($"Valores intercambiados: num1 = {num1}, num2 = {num2}");
+        }
+
+        static void Intercambiar(ref int a, ref int b)
+        {
+            int temp = a;
+            a = b;
+            b = temp;
+        }
+
+        static void TablaMultiplicar()
+        {
+            Console.WriteLine("Ingrese un número:");
+            if (!int.TryParse(Console.ReadLine(), out int numero))
+            {
+                Console.WriteLine("Número no válido.");
+                return;
+            }
+
+            MostrarTablaMultiplicar(numero);
+        }
+
+        static void MostrarTablaMultiplicar(int numero)
+        {
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.WriteLine($"{numero} x {i} = {numero * i}");
+            }
+        }
+    }
+}
+
